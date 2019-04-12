@@ -1,4 +1,4 @@
-#Task
+# Task
 
 ## How to run
 
@@ -6,7 +6,7 @@
 2. cd task
 3. `npm install`
 4. Import sql file from server/database_schema to your database.
-5. Change the file server/config/config.js according to your database.
+5. Change the file `server/config/config.js` according to your database.
 6. `npm run start` to start the server.
 
 ## Routes to Hit
