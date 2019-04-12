@@ -13,16 +13,19 @@ router.get("/name/:id", (req, res) => {
     data: []
   };
   conn = new MySql(configObj);
-  let query = `SELECT * FROM student WHERE id =${id}`;
-  let result = conn.query(query);
-  if (result.length !== 0) {
+  try {
+    let query = `SELECT * FROM student WHERE id =${id}`;
+    let result = conn.query(query);
     resp_obj = {
       status: true,
       data: result
     };
+  } catch (error) {
+    resp_obj["error"] = error;
   }
   res.json(resp_obj);
 });
+
 router.get("/class/:id", (req, res) => {
   let id = req.params.id;
   let resp_obj = {
@@ -30,22 +33,25 @@ router.get("/class/:id", (req, res) => {
     data: []
   };
   conn = new MySql(configObj);
-  let query = `SELECT * FROM student_class WHERE id =${id}`;
-  let result = conn.query(query);
-  if (result.length !== 0) {
+  try {
+    let query = `SELECT * FROM student_class WHERE id =${id}`;
+    let result = conn.query(query);
     resp_obj = {
       status: true,
       data: result
     };
+  } catch (error) {
+    resp_obj["error"] = error;
   }
   res.json(resp_obj);
 });
+
 router.get("/reports/:id", async (req, res) => {
   let id = req.params.id;
   conn = new MySql(configObj);
   const client = request(req.app);
-  var resp_1 = await client.get("/student/name/" + id);
-  var resp_2 = await client.get("/student/class/" + id);
+  let resp_1 = await client.get("/student/name/" + id);
+  let resp_2 = await client.get("/student/class/" + id);
   let resp_obj = {
     status: false,
     data: []
@@ -60,10 +66,15 @@ router.get("/reports/:id", async (req, res) => {
       class: resp_2.data[0].class
     };
     let query = `INSERT INTO student_reports VALUES 
-            (${data.id},'${data.name}','${data.student_id}', 
+            (${data.id},${data.name}','${data.student_id}', 
             '${data.class}' )`;
-    let result = conn.query(query);
-    console.log(result);
+    try {
+      let result = conn.query(query);
+      console.log(result);
+      resp_obj = { status: true, data };
+    } catch (e) {
+      resp_obj["error"] = e;
+    }
   }
   res.json(resp_obj);
 });
