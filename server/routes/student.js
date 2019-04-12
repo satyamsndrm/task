@@ -66,7 +66,7 @@ router.get("/reports/:id", async (req, res) => {
       class: resp_2.data[0].class
     };
     let query = `INSERT INTO student_reports VALUES 
-            (${data.id},${data.name}','${data.student_id}', 
+            (${data.id},'${data.name}','${data.student_id}', 
             '${data.class}' )`;
     try {
       let result = conn.query(query);
